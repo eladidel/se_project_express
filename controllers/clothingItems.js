@@ -6,17 +6,15 @@ module.exports.getClothingItems = (req, res) => {
     .then((items) => res.send(items))
     .catch((err) => {
       console.error(err);
-      return res.status(SERVER_ERROR.STATUS).send(SERVER_ERROR.MESSAGE);
+      return res
+        .status(SERVER_ERROR.STATUS)
+        .send({ message: SERVER_ERROR.MESSAGE });
     });
 };
 
 module.exports.createClothingItems = (req, res) => {
   const { name, weather, imageUrl } = req.body;
   const { _id } = req.user;
-  if (!name || !weather || !imageUrl)
-    return res
-      .status(BAD_REQUEST)
-      .send({ message: "Invalid Name, weather or ImageURL" });
 
   ClothingItem.create({ name, weather, imageUrl, owner: _id })
     .then((item) => res.status(201).send(item))
@@ -24,7 +22,9 @@ module.exports.createClothingItems = (req, res) => {
       console.error(err);
       if (err.name === "ValidationError")
         return res.status(BAD_REQUEST).send({ message: err.message });
-      return res.status(SERVER_ERROR.STATUS).send(SERVER_ERROR.MESSAGE);
+      return res
+        .status(SERVER_ERROR.STATUS)
+        .send({ message: SERVER_ERROR.MESSAGE });
     });
 };
 
@@ -40,6 +40,8 @@ module.exports.deleteClothingItems = (req, res) => {
         return res.status(BAD_REQUEST).send({ message: err.message });
       if (err.name === "DocumentNotFoundError")
         return res.status(NOT_FOUND).send({ message: err.message });
-      return res.status(SERVER_ERROR.STATUS).send(SERVER_ERROR.MESSAGE);
+      return res
+        .status(SERVER_ERROR.STATUS)
+        .send({ message: SERVER_ERROR.MESSAGE });
     });
 };

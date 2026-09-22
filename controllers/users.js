@@ -8,7 +8,9 @@ module.exports.getUsers = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      return res.status(SERVER_ERROR.STATUS).send(SERVER_ERROR.MESSAGE);
+      return res
+        .status(SERVER_ERROR.STATUS)
+        .send({ message: SERVER_ERROR.MESSAGE });
     });
 };
 
@@ -26,14 +28,14 @@ module.exports.getUser = (req, res) => {
         return res.status(BAD_REQUEST).send({ message: err.message });
       if (err.name === "DocumentNotFoundError")
         return res.status(NOT_FOUND).send({ message: err.message });
-      return res.status(SERVER_ERROR.STATUS).send(SERVER_ERROR.MESSAGE);
+      return res
+        .status(SERVER_ERROR.STATUS)
+        .send({ message: SERVER_ERROR.MESSAGE });
     });
 };
 
 module.exports.createUser = (req, res) => {
   const { name, avatar } = req.body;
-  if (!name || !avatar)
-    return res.status(BAD_REQUEST).send({ message: "Invalid Name or Avatar" });
 
   User.create({ name, avatar })
     .then((user) => res.status(201).send(user))
@@ -41,6 +43,8 @@ module.exports.createUser = (req, res) => {
       console.error(err);
       if (err.name === "ValidationError")
         return res.status(BAD_REQUEST).send({ message: err.message });
-      return res.status(SERVER_ERROR.STATUS).send(SERVER_ERROR.MESSAGE);
+      return res
+        .status(SERVER_ERROR.STATUS)
+        .send({ message: SERVER_ERROR.MESSAGE });
     });
 };

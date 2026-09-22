@@ -4,17 +4,17 @@ const validator = require("validator");
 const clothingItemSchema = new mongoose.Schema({
   name: {
     type: String,
-    require: true,
+    required: true,
     minlength: 2,
     maxlength: 30,
   },
   weather: {
-    require: true,
+    required: true,
     type: String,
     enum: ["hot", "warm", "cold"],
   },
   imageUrl: {
-    require: true,
+    required: true,
     type: String,
     validate: {
       validator(value) {
@@ -24,13 +24,13 @@ const clothingItemSchema = new mongoose.Schema({
     },
   },
   owner: {
-    require: true,
+    required: true,
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
   },
   likes: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
+    default: [],
   },
   createdAt: {
     type: Date,

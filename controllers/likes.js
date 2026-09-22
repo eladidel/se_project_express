@@ -18,7 +18,9 @@ module.exports.likeItem = (req, res) => {
         return res.status(NOT_FOUND).send({ message: err.message });
       if (err.name === "CastError")
         return res.status(BAD_REQUEST).send({ message: err.message });
-      return res.status(SERVER_ERROR.STATUS).send(SERVER_ERROR.MESSAGE);
+      return res
+        .status(SERVER_ERROR.STATUS)
+        .send({ message: SERVER_ERROR.MESSAGE });
     });
 };
 
@@ -39,6 +41,8 @@ module.exports.dislikeItem = (req, res) => {
         return res.status(NOT_FOUND).send({ message: err.message });
       if (err.name === "CastError")
         return res.status(BAD_REQUEST).send({ message: err.message });
-      return res.status(SERVER_ERROR.STATUS).send(SERVER_ERROR.MESSAGE);
+      return res
+        .status(SERVER_ERROR.STATUS)
+        .send({ message: SERVER_ERROR.MESSAGE });
     });
 };
