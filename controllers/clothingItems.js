@@ -1,11 +1,12 @@
 const ClothingItem = require("../models/clothingItem");
+const { BAD_REQUEST, NOT_FOUND, SERVER_ERROR } = require("../utils/errors");
 
 module.exports.getClothingItems = (req, res) => {
   ClothingItem.find({})
     .then((items) => res.send(items))
     .catch((err) => {
       console.error(err);
-      return res.status(500).send({ message: err.message });
+      return res.status(SERVER_ERROR.STATUS).send(SERVER_ERROR.MESSAGE);
     });
 };
 
@@ -14,7 +15,7 @@ module.exports.createClothingItems = (req, res) => {
   const { _id } = req.user;
   if (!name || !weather || !imageUrl)
     return res
-      .status(400)
+      .status(BAD_REQUEST)
       .send({ message: "Invalid Name, weather or ImageURL" });
 
   ClothingItem.create({ name, weather, imageUrl, owner: _id })
@@ -22,8 +23,8 @@ module.exports.createClothingItems = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "ValidationError")
-        return res.status(400).send({ message: err.message });
-      return res.status(500).send({ message: err.message });
+        return res.status(BAD_REQUEST).send({ message: err.message });
+      return res.status(SERVER_ERROR.STATUS).send(SERVER_ERROR.MESSAGE);
     });
 };
 
@@ -36,9 +37,9 @@ module.exports.deleteClothingItems = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "CastError")
-        return res.status(400).send({ message: err.message });
+        return res.status(BAD_REQUEST).send({ message: err.message });
       if (err.name === "DocumentNotFoundError")
-        return res.status(404).send({ message: err.message });
-      return res.status(500).send({ message: err.message });
+        return res.status(NOT_FOUND).send({ message: err.message });
+      return res.status(SERVER_ERROR.STATUS).send(SERVER_ERROR.MESSAGE);
     });
 };
