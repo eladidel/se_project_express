@@ -37,7 +37,7 @@ module.exports.deleteClothingItems = (req, res) => {
   const { itemId } = req.params;
   const { _id } = req.user;
 
-  ClothingItem.findByIdAndDelete(itemId)
+  ClothingItem.findById(itemId)
     .orFail()
     .then((item) => {
       if (item.owner.toString() !== _id) {

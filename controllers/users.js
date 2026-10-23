@@ -11,19 +11,6 @@ const {
 } = require("../utils/errors");
 const { JWT_SECRET } = require("../utils/config");
 
-module.exports.getUsers = (req, res) => {
-  User.find({})
-    .then((users) => {
-      res.send(users);
-    })
-    .catch((err) => {
-      console.error(err);
-      return res
-        .status(SERVER_ERROR.STATUS)
-        .send({ message: SERVER_ERROR.MESSAGE });
-    });
-};
-
 module.exports.getCurrentUser = (req, res) => {
   const { _id } = req.user;
   User.findById(_id)
@@ -98,6 +85,8 @@ module.exports.updateProfile = (req, res) => {
     .catch((err) => {
       console.error(err.name);
       if (err.name === "CastError")
+        return res.status(BAD_REQUEST).send({ message: err.message });
+      if (err.name === "ValidationError")
         return res.status(BAD_REQUEST).send({ message: err.message });
       if (err.name === "DocumentNotFoundError")
         return res.status(NOT_FOUND).send({ message: err.message });
