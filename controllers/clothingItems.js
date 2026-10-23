@@ -1,5 +1,10 @@
 const ClothingItem = require("../models/clothingItem");
-const { BAD_REQUEST, NOT_FOUND, SERVER_ERROR } = require("../utils/errors");
+const {
+  BAD_REQUEST,
+  NOT_FOUND,
+  SERVER_ERROR,
+  FORBIDDEN,
+} = require("../utils/errors");
 
 module.exports.getClothingItems = (req, res) => {
   ClothingItem.find({})
@@ -30,16 +35,30 @@ module.exports.createClothingItems = (req, res) => {
 
 module.exports.deleteClothingItems = (req, res) => {
   const { itemId } = req.params;
+  const { _id } = req.user;
 
   ClothingItem.findByIdAndDelete(itemId)
     .orFail()
-    .then(() => res.status(200).send({ message: "Item was delete" }))
+    .then((item) => {
+      if (item.owner != _id) {
+        return Promise.reject(
+          Object.assign(new Error("You can only delete your own items"), {
+            name: "ForbiddenError",
+          })
+        );
+      }
+      return item
+        .deleteOne()
+        .then(() => res.status(200).send({ message: "Item deleted" }));
+    })
     .catch((err) => {
-      console.error(err);
+      console.error(err.name);
       if (err.name === "CastError")
         return res.status(BAD_REQUEST).send({ message: err.message });
       if (err.name === "DocumentNotFoundError")
         return res.status(NOT_FOUND).send({ message: err.message });
+      if (err.name === "ForbiddenError")
+        return res.status(FORBIDDEN).send({ message: err.message });
       return res
         .status(SERVER_ERROR.STATUS)
         .send({ message: SERVER_ERROR.MESSAGE });

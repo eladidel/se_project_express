@@ -1,18 +1,16 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const indexRouter = require("./routes/index");
+const cors = require("cors");
 
 const app = express();
 const { PORT = 3001 } = process.env;
 
 app.use(express.json());
-app.use((req, res, next) => {
-  req.user = {
-    _id: "6ab1aff9adb110a91ccd68d2",
-  };
-  next();
-});
+
 app.use("/", indexRouter);
+
+app.use(cors());
 
 mongoose
   .connect("mongodb://127.0.0.1:27017/wtwr_db")
