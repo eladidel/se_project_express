@@ -9,7 +9,7 @@ const {
   SERVER_ERROR,
   CONFLICT_ERROR,
 } = require("../utils/errors");
-const { JWT_SECRET } = require("../utils/config.js");
+const { JWT_SECRET } = require("../utils/config");
 
 module.exports.getUsers = (req, res) => {
   User.find({})

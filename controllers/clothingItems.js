@@ -40,7 +40,7 @@ module.exports.deleteClothingItems = (req, res) => {
   ClothingItem.findByIdAndDelete(itemId)
     .orFail()
     .then((item) => {
-      if (item.owner != _id) {
+      if (item.owner.toString() !== _id) {
         return Promise.reject(
           Object.assign(new Error("You can only delete your own items"), {
             name: "ForbiddenError",

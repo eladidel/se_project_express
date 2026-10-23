@@ -5,7 +5,7 @@ const {
   deleteClothingItems,
 } = require("../controllers/clothingItems");
 const { likeItem, dislikeItem } = require("../controllers/likes");
-const auth = require("../middlewares/auth.js");
+const auth = require("../middlewares/auth");
 
 router.get("/", getClothingItems);
 router.post("/", auth, createClothingItems);
