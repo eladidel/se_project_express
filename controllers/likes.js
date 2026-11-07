@@ -11,7 +11,7 @@ module.exports.likeItem = (req, res) => {
     { new: true }
   )
     .orFail()
-    .then(() => res.status(200).send({ message: "Liked item" }))
+    .then((card) => res.status(200).send(card))
     .catch((err) => {
       console.error(err);
       if (err.name === "DocumentNotFoundError")
@@ -34,7 +34,7 @@ module.exports.dislikeItem = (req, res) => {
     { new: true }
   )
     .orFail()
-    .then(() => res.status(200).send({ message: "Disliked Item" }))
+    .then((card) => res.status(200).send(card))
     .catch((err) => {
       console.error(err);
       if (err.name === "DocumentNotFoundError")

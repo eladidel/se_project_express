@@ -80,7 +80,6 @@ module.exports.updateProfile = (req, res) => {
     .orFail()
     .then((user) => {
       res.status(200).send(user);
-      console.log(user);
     })
     .catch((err) => {
       console.error(err.name);
